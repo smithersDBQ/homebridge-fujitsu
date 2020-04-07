@@ -16,15 +16,15 @@
                 "title": "Username",
                 "type": "string",
                 "required": true,
-                "default": "Fujitsu Mini Split",
+                "default": "",
                 "description": "Username for FGLair App"
             },
             "password": {
-                "title": "Username",
+                "title": "Password",
                 "type": "string",
                 "required": true,
-                "default": "Fujitsu Mini Split",
-                "description": "Username for FGLair App"
+                "default": "",
+                "description": "Password for FGLair App"
             },
             "interval": {
                 "title": "Update Interval",
