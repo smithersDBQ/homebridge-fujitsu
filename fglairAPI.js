@@ -36,7 +36,7 @@ var options_auth = {
     port: 443,
     path: "/users/sign_in.json",
     method:'POST',
-    headers: { 
+    headers: {
         'Content-Type': 'application/json'
     }
 }
@@ -46,9 +46,37 @@ var options = {
     port: 443,
     path: "/apiv1/",
     method:'GET',
-    headers: { 
+    headers: {
         'Content-Type' : 'application/json',
     }
+}
+var appID = {
+    app_id: "CJIOSP-id",
+    app_secret: "CJIOSP-Vb8MQL_lFiYQ7DKjN0eCFXznKZE"
+}
+
+function set_region(region)
+{
+    if( region == 'eu' )
+    {
+        options_auth['hostname'] = "user-field-eu.aylanetworks.com";
+        options['hostname'] = "ads-field-eu.aylanetworks.com";
+        appID['app_id'] = "FGLair-eu-id";
+        appID['app_secret'] = "FGLair-eu-gpFbVBRoiJ8E3QWJ-QRULLL3j3U"
+    }
+    else if( region == 'cn' )
+    {
+        options_auth['hostname']= "user-field.ayla.com.cn";
+        options['hostname'] = "ads-field.ayla.com.cn";
+        appID['app_id'] = "FGLairField-cn-id";
+        appID['app_secret'] = "FGLairField-cn-zezg7Y60YpAvy3HPwxvWLnd4Oh4"
+    }
+    else
+    {
+        //use the defaults
+
+    }
+
 }
 
 function read_devices_options(token)
@@ -89,7 +117,7 @@ var fglair = {
     {
         if( token == '' )
             return false;
-        
+
         return true;
     },
 
@@ -100,14 +128,14 @@ var fglair = {
         let req2 = https.request(opt, (res) => {
             //log(`statusCode: ${res.statusCode}`);
             res.on('data', (d) => {
-                data += d; 
-            
+                data += d;
+
             })
             res.on('end', () => {
                 if( res.statusCode == 200 )
                 {
                     let data_json = JSON.parse(data);
-                    
+
                     data_json.forEach( (dv) => {
                         //console.log(dv);
                         let dsn = dv['device']['dsn'];
@@ -120,7 +148,7 @@ var fglair = {
                 {
                     err = new Error("Get Devices Error");
                     log(err.message);
-                    callback(err);   
+                    callback(err);
                 }
             });
         }).on('error', (err) => {
@@ -137,8 +165,8 @@ var fglair = {
         let req2 = https.request(opt, (res) => {
             //log(`statusCode: ${res.statusCode}`);
             res.on('data', (d) => {
-                data += d; 
-            
+                data += d;
+
             })
             res.on('end', () => {
                 if( res.statusCode == 200 )
@@ -151,15 +179,15 @@ var fglair = {
                     //auth_token expired...
                     access_token = '';
                     log("Getting new token...");
-                    fglair.getAuth(username, user_pwd, (err,data) => 
+                    fglair.getAuth(username, user_pwd, (err,data) =>
                     {
                         err = new Error("Auth expired");
                         log("Error: " + err.message);
                         callback(err);
                     });
 
-                    
-                }                
+
+                }
             });
         }).on('error', (err) => {
             log("Error: " + err.message);
@@ -168,7 +196,7 @@ var fglair = {
         req2.end();
 
     },
-    
+
     setDeviceProp: function(property_key, val, callback)
     {
         let data = '';
@@ -180,7 +208,7 @@ var fglair = {
                 data += d;
             })
             res.on('end', () => {
-                callback(null) 
+                callback(null)
             });
         }).on('error', (err) => {
             log("Error: " + err.message);
@@ -191,18 +219,19 @@ var fglair = {
     },
 
     getAuth: function(user, password, callback)
-    { 
+    {
         username = user;
         user_pwd = password;
         if(access_token == '')
         {
-            var body = `{\r\n    \"user\": {\r\n        \"email\": \"${user}\",\r\n        \"application\":{\r\n            \"app_id\": \"CJIOSP-id\",\r\n            \"app_secret\": \"CJIOSP-Vb8MQL_lFiYQ7DKjN0eCFXznKZE\"\r\n        },\r\n        \"password\": \"${password}\"\r\n    }\r\n}`;
+            //var body = `{\r\n    \"user\": {\r\n        \"email\": \"${user}\",\r\n        \"application\":{\r\n            \"app_id\": \"CJIOSP-id\",\r\n            \"app_secret\": \"CJIOSP-Vb8MQL_lFiYQ7DKjN0eCFXznKZE\"\r\n        },\r\n        \"password\": \"${password}\"\r\n    }\r\n}`;
+            var body = `{\"user\": {\"email\": \"${user}\", \"application\":{\"app_id\": \"${appID.app_id}\",\"app_secret\": \"${appID.app_secret}\"},\"password\": \"${password}\"}}`;
             const req = https.request(options_auth, (res) => {
                 //log(`statusCode: ${res.statusCode}`);
                 res.on('data', (d) => {
                     access_token = JSON.parse(d)['access_token'];
                     log("API Access Token: " + access_token);
-                    callback(null, access_token);            
+                    callback(null, access_token);
                 })
 
             })
@@ -210,9 +239,9 @@ var fglair = {
             req.on('error', (error) => {
                 log("Error: " + error);
                 callback(error, null);
-            
+
             })
-          
+
             req.write(body);
             req.end();
         }
@@ -223,23 +252,21 @@ var fglair = {
         }
 
     },
-    
+
     setLog: function(logfile)
     {
         log=logfile;
     },
-    
+
     setToken: function(token)
     {
         access_token=token;
+    },
+
+    setRegion: function(region)
+    {
+        set_region(region);
     }
 }
 
 module.exports = fglair;
-
-
-
-
-
-
-

@@ -28,6 +28,11 @@
 | `password` | FGLair Password |
 | `model` _(optional)_ | Appears under "Model" for your accessory in the Home app |
 | `interval` _(optional)_ | Polling time for thermostat (Default: 60 sec.) |
+| `region` _(optional)_ | Region for thermostat, change for China & E.U. (Default: "us") |
+
+##New Features
+- Added China and European servers for API, change region to
+- Improved update speed when changing modes / temps in Home App
 
 ## Current limitations
 - Only one air conditioner is displayed, the API chooses the first device.  I only have one system, so feel free to contribute changes if you have more than one A/C unit.
