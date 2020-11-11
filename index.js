@@ -164,6 +164,7 @@ Thermostat.prototype.setTargetHeatingCoolingState = function(val, cb) {
 	let fgl_val = OPERATION_MODE[HK_MODE[val]];
 	this.log("Setting Target Mode to " + fgl_val + ":" +HK_MODE[val]);
     this.service.updateCharacteristic(Characteristic.TargetHeatingCoolingState, val);
+    this.service.updateCharacteristic(Characteristic.CurrentHeatingCoolingState, val);
     this.api.setDeviceProp(this.keyCurrentHeatingCoolingState, fgl_val, (err) =>
     {
         cb(err);
