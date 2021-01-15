@@ -26,6 +26,7 @@
 | `name` | Name to appear in the Home app |
 | `username` | FGLair Username |
 | `password` | FGLair Password |
+| `deviceIndex` _(optional)_ | The index of the device this plugin will control (in the order in which you added them to your FGLair account) |
 | `model` _(optional)_ | Appears under "Model" for your accessory in the Home app |
 | `interval` _(optional)_ | Polling time for thermostat (Default: 60 sec.) |
 | `region` _(optional)_ | Region for thermostat, change for China & E.U. (Default: "us") |

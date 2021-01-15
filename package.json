@@ -1,6 +1,6 @@
 {
-  "name": "homebridge-fujitsu-2",
-  "version": "0.0.5",
+  "name": "homebridge-fujitsu",
+  "version": "0.0.6",
   "description": "Homebridge accessory for Fujistu Mini-Split AC systems",
   "main": "index.js",
   "scripts": {
@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/joelk/homebridge-fujitsu.git"
+    "url": "https://github.com/smithersDBQ/homebridge-fujitsu.git"
   },
   "keywords": [
     "homebridge-plugin",
     "homebridge"
   ],
-  "author": "Joel Kin",
+  "author": "Ryan Beggs",
   "license": "MIT",
   "dependencies": {
     "node-persist": "^3.0.5"

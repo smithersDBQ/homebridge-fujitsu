@@ -10,7 +10,7 @@ module.exports = function (homebridge) {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
     HbAPI = homebridge;
-    homebridge.registerAccessory("homebridge-fujitsu-2", "FGLairThermostat", Thermostat);
+    homebridge.registerAccessory("homebridge-fujitsu", "FGLairThermostat", Thermostat);
 };
 
 const OPERATION_MODE = { "off":0, "auto":2, "cool":3, "dry":4, "fan_only":5, "heat":6, 0:"off", 2:"auto", 3:"cool", 4:"dry", 5:"fan_only", 6:"heat"}
