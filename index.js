@@ -27,6 +27,7 @@ function Thermostat(log, config) {
     this.token = config.token || "";
     this.region = config.region || 'us'
     this.temperatureDisplayUnits = config.temperatureDisplayUnits || 0;
+	this.deviceIndex = config.deviceIndex || 0;
 
     this.currentHumidity = config.currentHumidity || false;
     this.targetHumidity = config.targetHumidity || false;
@@ -66,7 +67,7 @@ function Thermostat(log, config) {
             else
             {
 
-                this.serial = data[0]; //Only one thermostat is supported
+                this.serial = data[this.deviceIndex]; //Only one thermostat is supported
                 this.updateAll(that);
                 setInterval( this.updateAll, this.interval, that );
             }
@@ -117,23 +118,6 @@ Thermostat.prototype.updateAll = function(ctx)
                             break;
                         default:
                             ctx.targetHeatingCoolingState = Characteristic.TargetHeatingCoolingState.OFF;
-                            break;
-                    }
-
-                    switch(mode)
-                    {
-                        case "off":
-                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.OFF;
-                            break;
-                        case "heat":
-                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.HEAT;
-                            break;
-                        case "cool":
-                        case "fan":
-                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.COOL;
-                            break;
-                        default:
-                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.OFF;
                             break;
                     }
 

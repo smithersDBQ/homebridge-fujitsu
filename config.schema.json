@@ -26,6 +26,13 @@
                 "default": "",
                 "description": "Password for FGLair App"
             },
+			"deviceIndex": {
+				"title": "Device Index",
+				"type": "string",
+				"required": false,
+				"default": "0",
+				"description": "The index of the device this plugin will control (in the order in which you added them to your FGLair account)"
+			},
             "interval": {
                 "title": "Update Interval",
                 "type": "string",
