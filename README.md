@@ -31,12 +31,10 @@
 | `interval` _(optional)_ | Polling time for thermostat (Default: 60 sec.) |
 | `region` _(optional)_ | Region for thermostat, change for China & E.U. (Default: "us") |
 
-##New Features
-- Added China and European servers for API, change region to
-- Improved update speed when changing modes / temps in Home App
+## New Features
+- Works with multiple air conditioner heads.
 
 ## Current limitations
-- Only one air conditioner is displayed, the API chooses the first device.  I only have one system, so feel free to contribute changes if you have more than one A/C unit.
 - Timeout on token is not enabled, when token is invalid the API will re-authenticate.
 - Auth. Token is not cached (Future Release)
 - Previous thermostat state is not cached (Future Release)
