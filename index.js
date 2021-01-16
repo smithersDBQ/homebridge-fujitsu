@@ -27,7 +27,7 @@ function Thermostat(log, config) {
     this.token = config.token || "";
     this.region = config.region || 'us'
     this.temperatureDisplayUnits = config.temperatureDisplayUnits || 0;
-	this.deviceIndex = config.deviceIndex;
+	this.deviceIndex = config.deviceIndex || 0;
 
     this.currentHumidity = config.currentHumidity || false;
     this.targetHumidity = config.targetHumidity || false;
