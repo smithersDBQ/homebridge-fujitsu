@@ -32,7 +32,7 @@
 | `region` _(optional)_ | Region for thermostat, change for China & E.U. (Default: "us") |
 
 ## New Features
-- Works with multiple air conditioner heads.
+- Works with multiple air conditioner heads.  Click "Add accessory" from plug in settings to add a second unit.
 
 ## Current limitations
 - Timeout on token is not enabled, when token is invalid the API will re-authenticate.

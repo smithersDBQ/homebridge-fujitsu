@@ -96,7 +96,22 @@ function Thermostat(log, config) {
                             ctx.targetHeatingCoolingState = Characteristic.TargetHeatingCoolingState.OFF;
                             break;
                     }
-
+                    switch(mode)
+                    {
+                        case "off":
+                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.OFF;
+                            break;
+                        case "heat":
+                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.HEAT;
+                            break;
+                        case "cool":
+                        case "fan":
+                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.COOL;
+                            break;
+                        default:
+                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.OFF;
+                            break;
+                    }
                     ctx.keyCurrentHeatingCoolingState = prop['property']['key'];
 
                     //ctx.log("[" + ctx.serial + "] Got HeatingCooling State: "+ ctx.targetHeatingCoolingState);
