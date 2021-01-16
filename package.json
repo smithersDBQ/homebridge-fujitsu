@@ -1,6 +1,6 @@
 {
   "name": "homebridge-fujitsu",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Homebridge accessory for Fujistu Mini-Split AC systems",
   "main": "index.js",
   "scripts": {

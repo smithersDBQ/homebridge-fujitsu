@@ -27,6 +27,7 @@ function Thermostat(log, config) {
     this.token = config.token || "";
     this.region = config.region || 'us'
     this.temperatureDisplayUnits = config.temperatureDisplayUnits || 0;
+	this.deviceIndex = config.deviceIndex || 0;
 
     this.currentHumidity = config.currentHumidity || false;
     this.targetHumidity = config.targetHumidity || false;
@@ -46,38 +47,14 @@ function Thermostat(log, config) {
 
     this.log(this.name);
     this.service = new Service.Thermostat(this.name);
+	this.informationService = new Service.AccessoryInformation();
     this.api = require('./fglairAPI.js')
     this.api.setLog(this.log);
     this.api.setToken(this.token);
     this.api.setRegion(this.region);
-
-    that = this;
-
-    this.api.getAuth(this.userName ,this.password, (err, token) =>
-    {
-        this.token = token;
-
-        this.api.getDevices(token, (err,data) =>
-        {
-            if( err)
-            {
-               //TODO:  Do something...
-            }
-            else
-            {
-
-                this.serial = data[0]; //Only one thermostat is supported
-                this.updateAll(that);
-                setInterval( this.updateAll, this.interval, that );
-            }
-        });
-
-    });
-}
-
-Thermostat.prototype.updateAll = function(ctx)
-{
-    ctx.api.getDeviceProp(ctx.serial, (err,properties) =>
+	
+	this.updateAll = function(ctx) {
+		ctx.api.getDeviceProp(ctx.serial, (err,properties) =>
     {   if(err)
         {
             ctx.log("Update Properties: " + err.message);
@@ -94,7 +71,7 @@ Thermostat.prototype.updateAll = function(ctx)
                     //ctx.log("[" + ctx.serial + "] Got Temperature: "+ ctx.targetTemperature + ":" + ctx.currentTemperature);
                     ctx.service.updateCharacteristic(Characteristic.TargetTemperature, ctx.targetTemperature);
                     ctx.service.updateCharacteristic(Characteristic.CurrentTemperature, ctx.currentTemperature);
-                    this.keyTargetTemperature = prop['property']['key'];
+                    ctx.keyTargetTemperature = prop['property']['key'];
                 }
                 else if( prop['property']['name'] == 'operation_mode' )
                 {
@@ -120,24 +97,7 @@ Thermostat.prototype.updateAll = function(ctx)
                             break;
                     }
 
-                    switch(mode)
-                    {
-                        case "off":
-                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.OFF;
-                            break;
-                        case "heat":
-                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.HEAT;
-                            break;
-                        case "cool":
-                        case "fan":
-                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.COOL;
-                            break;
-                        default:
-                            ctx.currentHeatingCoolingState = Characteristic.CurrentHeatingCoolingState.OFF;
-                            break;
-                    }
-
-                    this.keyCurrentHeatingCoolingState = prop['property']['key'];
+                    ctx.keyCurrentHeatingCoolingState = prop['property']['key'];
 
                     //ctx.log("[" + ctx.serial + "] Got HeatingCooling State: "+ ctx.targetHeatingCoolingState);
                     ctx.service.updateCharacteristic(Characteristic.CurrentHeatingCoolingState, ctx.currentHeatingCoolingState);
@@ -149,7 +109,30 @@ Thermostat.prototype.updateAll = function(ctx)
         }
 
     });
-};
+}
+	
+	this.api.getAuth(this.userName ,this.password, (err, token) =>
+	{
+		this.token = token;
+
+		this.api.getDevices(token, (err,data) =>
+		{
+			if( err)
+			{
+			   //TODO:  Do something...
+			}
+			else
+			{
+				this.serial = data[this.deviceIndex];
+				this.log("device serial for " + this.deviceIndex + ": " + this.serial);
+				this.updateAll(this);
+				this.log("updated all for " + this.deviceIndex);
+				setInterval( this.updateAll, this.interval, this );
+			}
+		});
+
+	});
+}
 
 Thermostat.prototype.getCurrentHeatingCoolingState = function(cb) {
     cb(null, this.currentHeatingCoolingState);
