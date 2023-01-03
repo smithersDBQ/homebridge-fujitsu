@@ -67,11 +67,13 @@ function Thermostat(log, config) {
                 if( prop['property']['name'] == 'adjust_temperature' )
                 {
                     ctx.targetTemperature = parseInt(prop['property']['value'])/10
-                    ctx.currentTemperature = ctx.targetTemperature;
-                    //ctx.log("[" + ctx.serial + "] Got Temperature: "+ ctx.targetTemperature + ":" + ctx.currentTemperature);
                     ctx.service.updateCharacteristic(Characteristic.TargetTemperature, ctx.targetTemperature);
-                    ctx.service.updateCharacteristic(Characteristic.CurrentTemperature, ctx.currentTemperature);
                     ctx.keyTargetTemperature = prop['property']['key'];
+                }
+                else if( prop['property']['name'] == 'display_temperature' )
+                {
+                    ctx.currentTemperature = parseInt(prop['property']['value'])/100 - 50
+                    ctx.service.updateCharacteristic(Characteristic.CurrentTemperature, ctx.currentTemperature);
                 }
                 else if( prop['property']['name'] == 'operation_mode' )
                 {
